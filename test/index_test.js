@@ -8,6 +8,7 @@ var should = require('should');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var timestamps = require('../');
+var ObjectId = require('mongodb/node_modules/bson').ObjectID;
 
 mongoose.connect('mongodb://localhost/mongoose_timestamps')
 mongoose.connection.on('error', function (err) {
@@ -35,6 +36,14 @@ after(function(done) {
 describe('timestamps', function() {
   it('should be set to the same value on creation', function(done) {
     var cop = new TimeCop({ email: 'brian@brian.com' });
+    cop.save( function (err) {
+      cop.createdAt.should.equal(cop.updatedAt);
+      done();
+    });
+  })
+
+  it('should be set to the same value on creation even when _id was created on the client side', function(done) {
+    var cop = new TimeCop({ email: 'brian@brian.com', _id: ObjectId('00000000000000000000000a')});
     cop.save( function (err) {
       cop.createdAt.should.equal(cop.updatedAt);
       done();

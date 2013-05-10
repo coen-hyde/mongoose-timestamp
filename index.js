@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
 var BinaryParser = require('mongodb/node_modules/bson').BinaryParser;
 
 function timestampsPlugin(schema, options) {
-  if (schema.path('_id')) {
+  if (schema.path('createdAt')) {
     schema.add({
       updatedAt: Date
     });
